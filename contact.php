@@ -16,7 +16,7 @@ include 'includes/header.php';
 
     <ul>
         <li>
-            <a href="tel:+254720000000">0720 000 000</a> - The office
+            <a href="tel:+254700000000">0700 000 000</a> - The office
         </li>
 
         <li>

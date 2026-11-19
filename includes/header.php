@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title><?php echo $page_title; ?> — Ereteti Dairy Sacco</title>
+    <title><?php echo htmlspecialchars($page_title, ENT_QUOTES, 'UTF-8'); ?> — Ereteti Dairy Sacco</title>
 
     <link rel="stylesheet" href="css/style.css">
     <script src="js/main.js" defer></script>
@@ -15,9 +15,10 @@
 <header>
     <h1><?php echo $page_title; ?></h1>
     <p>Milk collected twice a day, on three routes out of Ngong.</p>
+    <img src="img/logo-edairy.png" alt="Ereteti Dairy Sacco Logo" class="logo">
 </header>
 
-<nav>
+<nav aria-label="Main navigation">
     <ul>
         <li><a href="index.php">Home</a></li>
         <li><a href="about.php">About</a></li>

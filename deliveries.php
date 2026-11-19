@@ -1,133 +1,110 @@
 <?php
-$page_title = 'Welcome to Ereteti';
+require_once 'includes/db.php';
+$page_title = 'Deliveries';
 include 'includes/header.php';
+
+$sql = "SELECT f.member_no, f.first_name, f.last_name, d.session, d.litres, d.accepted
+        FROM milk_delivery d
+        JOIN farmer f ON f.farmer_id = d.farmer_id
+        WHERE d.delivery_date = '2026-10-12'
+        ORDER BY f.member_no, d.session";
+$result = mysqli_query($conn, $sql);
+$count = mysqli_num_rows($result);
 ?>
-  <main>
-    <p>Milk received at the Olepolos centre on the Kiserian route,
-    Monday 12 October 2026. Both sessions are listed: the morning
-    collection from 6.30am and the evening collection from 4.00pm.</p>
 
-    <!-- Week 8: the clerk's form -->
+<main>
+    <p><?php echo $count; ?> deliveries on this day.</p>
+
+    <p>
+        Milk received across all three routes — Kiserian, Ngong, and Rongai —
+        for the morning and evening collection sessions.
+    </p>
+
+    <img src="img/collection-lorry.jpg"
+         alt="Ereteti Dairy Sacco milk collection lorry">
+
     <h2>Record a delivery</h2>
+    <form id="delivery-form" class="page-form" action="deliveries.php" method="post">
+        <div class="form-grid">
+            <div class="form-field">
+                <label for="member">Member number</label>
+                <input type="text" id="member" name="member_no"
+                       placeholder="ER-0001" pattern="ER-[0-9]{4}"
+                       maxlength="7" required>
+                <p id="member-message" class="message" aria-live="polite"></p>
+            </div>
 
-    <form id="delivery-form" action="#" method="post">
-      <label for="member">Member number</label>
-      <input type="text" id="member" name="member_no"
-             placeholder="ER-0000" required>
-      <p id="member-message" class="message"
-         aria-live="polite"></p>
+            <div class="form-field">
+                <label for="session">Session</label>
+                <select id="session" name="session" required>
+                    <option value="">Choose a session</option>
+                    <option value="MORNING">Morning</option>
+                    <option value="EVENING">Evening</option>
+                </select>
+            </div>
 
-      <label for="session">Session</label>
-      <select id="session" name="session" required>
-        <option value="">Choose a session</option>
-        <option value="MORNING">Morning</option>
-        <option value="EVENING">Evening</option>
-      </select>
+            <div class="form-field">
+                <label for="litres">Litres</label>
+                <input type="number" id="litres" name="litres"
+                       min="0.01" max="200" step="0.01" required>
+                <p id="litres-message" class="message" aria-live="polite"></p>
+            </div>
 
-      <label for="litres">Litres</label>
-      <input type="number" id="litres" name="litres"
-             step="0.01" required>
-      <p id="litres-message" class="message"
-         aria-live="polite"></p>
+            <div class="form-field">
+                <label for="accepted">Acceptance</label>
+                <select id="accepted" name="accepted" required>
+                    <option value="1">Accepted</option>
+                    <option value="0">Rejected</option>
+                </select>
+            </div>
+        </div>
 
-      <button type="submit">Record delivery</button>
-      <p id="form-message" aria-live="polite"></p>
+        <button type="submit">Record delivery</button>
+        <p id="form-message" aria-live="polite"></p>
     </form>
 
-    <div class="table-scroll">
-     <h2>Deliveries by route – Friday 2 October 2026</h2>
+    <table>
+        <caption>Milk received, Monday 12 October 2026</caption>
+        <thead>
+            <tr>
+                <th scope="col">Member</th>
+                <th scope="col">Farmer</th>
+                <th scope="col">Session</th>
+                <th scope="col">Litres</th>
+                <th scope="col">Accepted</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if ($count === 0) {
+                echo '<tr><td colspan="5">No deliveries recorded on this day.</td></tr>';
+            } else {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    if ($row['accepted'] == 1) {
+                        $accepted = 'Yes';
+                    } else {
+                        $accepted = 'No';
+                    }
 
-    <table border="1">
-
-        <tr>
-            <th rowspan="2">Route</th>
-            <th rowspan="2">Farmer</th>
-            <th colspan="2">Litres</th>
-            <th rowspan="2">Total (L)</th>
-        </tr>
-
-        <tr>
-            <th>Morning</th>
-            <th>Evening</th>
-        </tr>
-
-        <!-- Gatundu North -->
-        <tr>
-            <td rowspan="3">Gatundu North</td>
-            <td>Peter Mwangi</td>
-            <td>12.0</td>
-            <td>10.5</td>
-            <td>22.5</td>
-        </tr>
-
-        <tr>
-            <td>Grace Wanjiku</td>
-            <td>9.0</td>
-            <td>8.5</td>
-            <td>17.5</td>
-        </tr>
-
-        <tr>
-            <td>Joseph Kamau</td>
-            <td>8.5</td>
-            <td>7.0</td>
-            <td>15.5</td>
-        </tr>
-
-        <!-- Gatundu South -->
-        <tr>
-            <td rowspan="3">Gatundu South</td>
-            <td>Esther Njeri</td>
-            <td>14.0</td>
-            <td>12.5</td>
-            <td>26.5</td>
-        </tr>
-
-        <tr>
-            <td>Daniel Kariuki</td>
-            <td>6.5</td>
-            <td>6.0</td>
-            <td>12.5</td>
-        </tr>
-
-        <tr>
-            <td>Mercy Nyambura</td>
-            <td>10.0</td>
-            <td>9.5</td>
-            <td>19.5</td>
-        </tr>
-
-        <!-- Kamwangi -->
-        <tr>
-            <td rowspan="2">Kamwangi</td>
-            <td>Samuel Gitau</td>
-            <td>18.0</td>
-            <td>16.5</td>
-            <td>34.5</td>
-        </tr>
-
-        <tr>
-            <td>Lucy Wairimu</td>
-            <td>7.5</td>
-            <td>7.0</td>
-            <td>14.5</td>
-        </tr>
-
-        <!-- Total -->
-        <tr>
-            <th colspan="2">All routes</th>
-            <th>85.5</th>
-            <th>77.5</th>
-            <th>163.0</th>
-        </tr>
-
+                    echo '<tr>';
+                    echo '<td>' . $row['member_no'] . '</td>';
+                    echo '<td>' . $row['first_name'] . ' ' . $row['last_name'] . '</td>';
+                    echo '<td>' . ucfirst(strtolower($row['session'])) . '</td>';
+                    echo '<td>' . $row['litres'] . '</td>';
+                    echo '<td>' . $accepted . '</td>';
+                    echo '</tr>';
+                }
+            }
+            ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="row" colspan="3">Accepted today</th>
+                <td id="accepted-total"></td>
+                <td></td>
+            </tr>
+        </tfoot>
     </table>
-    </div>
+</main>
 
-    <p>Joseph Kamau's morning load failed the alcohol test and was
-    rejected, so it is not counted in the day's total. It is still
-    listed: a rejected load is recorded, never deleted, because the
-    farmer has a right to see what happened to their milk.</p>
-  </main>
 <?php include 'includes/footer.php'; ?>
- 

@@ -16,17 +16,16 @@ include 'includes/header.php';
       membership number is issued.</p>
     </section>
 
-    <section>""
+    <section>
       <h2>Where we collect</h2>
       <ul class="route-cards">
-        <li><a href="routes.html">Kiserian route</a>
+        <li><a href="routes.php">Kiserian route</a>
         </li>
-        <li><a href="routes.html">Ngong route</a></li>
-        <li><a href="routes.html">Rongai route</a></li>
+        <li><a href="routes.php">Ngong route</a></li>
+        <li><a href="routes.php">Rongai route</a></li>
       </ul>
-      <img src="img/collection-centre.jpg"
-           alt="Farmers queuing with churns at
-                the Kiserian centre">
+      <img src="img/mcollection-centre.jpg"
+           alt="Ereteti Dairy Sacco Milk Collection Lorry">
     </section>
   </main>
 

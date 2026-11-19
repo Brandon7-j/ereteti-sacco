@@ -1,36 +1,25 @@
 <?php
-$page_title = 'Our Routes';
+require_once 'includes/db.php';
+$page_title = 'Our routes';
 include 'includes/header.php';
+
+$sql = "SELECT route_name, collection_centre FROM route ORDER BY route_id";
+$result = mysqli_query($conn, $sql);
 ?>
 
 <main>
+    <label for="route-search">Find a route or a centre</label>
+    <input type="search" id="route-search" placeholder="e.g. Ngong">
+    <p id="route-count" aria-live="polite"></p>
 
-    <h2>Kiserian route</h2>
-    <p>The lorry runs from 6.30am and again from 4.00pm.</p>
-
-    <ul>
-        <li>Olepolos centre</li>
-        <li>Kandisi centre</li>
-    </ul>
-
-    <h2>Ngong route</h2>
-    <p>The lorry runs from 6.00am and again from 3.30pm.</p>
-
-    <ul>
-        <li>Matasia centre</li>
-        <li>Vet centre</li>
-    </ul>
-
-    <h2>Rongai route</h2>
-    <p>The lorry runs from 7.00am and again from 4.30pm.</p>
-
-    <ul>
-        <li>Nkoroi centre</li>
-        <li>Kware centre</li>
-    </ul>
-
+    <?php
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo '<section>';
+        echo '<h2>' . $row['route_name'] . ' route</h2>';
+        echo '<p>Milk is cooled at ' . $row['collection_centre'] . '.</p>';
+        echo '</section>';
+    }
+    ?>
 </main>
 
-<?php
-include 'includes/footer.php';
-?>
+<?php include 'includes/footer.php'; ?>

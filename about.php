@@ -19,7 +19,7 @@ include 'includes/header.php';
         The ledger was a school exercise book.
     </blockquote>
 
-    <img src="img/collection-centre.jpg"
+    <img src="img/first-cooler.jpg"
          alt="Ereteti Dairy Sacco collection center operations">
 
 </main>
